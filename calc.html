@@ -198,15 +198,12 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}
 	
 	function disp(num) {
-		ret = num.toString();
-		if (ret.length > 14) {
-			if (parseFloat(num) / 10000 > 1 || parseFloat(num) * 10000 < 1) {
-				ret = parseFloat(num).toExponential(8);
-			} else {
-				ret = ret.substring(0, 11) + '...';
-			}				
-		}
-		return ret;
+		if (parseFloat(num) / 10000 > 1 || parseFloat(num) * 10000 < 1) {
+			return parseFloat(num).toExponential(8);
+		} else if (num.toString().length > 14) {
+			return num.toString().substring(0, 11) + '...';
+		}				
+		return num.toString();
 	}	
 	
 	function toclip(data) {
