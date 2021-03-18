@@ -51,6 +51,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	
 		
 	function removeElement(id) {
+//		alert('removing element ' + id)
 		var e = document.getElementById(id);
 		e.parentNode.removeChild(e);
 	}
@@ -121,6 +122,9 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		}	
 		drawText(entry, 'bold', 'black', 'start', 'score', 0.1*cw, 0.6*getHeight(), 90, '', false, 'entry', false);
 	}
+	
+	var page=0;	
+	
 	
 	function calculate() {
 		switch(entry) {
@@ -198,6 +202,14 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 			case 'TAN':
 				a = parseFloat(stack.pop());
 				stack.push(Math.tan(a).toString());
+				break;
+			case 'PREV':
+				page = (page - 1) % 2;
+				drawMenu(page);
+				break;
+			case 'NEXT':
+				page = (page + 1) % 2;
+				drawMenu(page);
 				break;
 		}
 		entry='';
@@ -281,7 +293,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	function drawButton(label, color, xindex, yindex, pt, call) {
 		x = (xindex + 0.5)*cw;
 		y = getHeight() - 10 - yindex*ch;
-		drawText(label, 'bold', color, 'middle', 'button_' + xindex.toString() + '-' + yindex.toString(), x, y, pt, call);
+		drawText(label, 'bold', color, 'middle', 'button_' + xindex.toString() + '_' + yindex.toString(), x, y, pt, call);
 	}
 
 
@@ -327,9 +339,52 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 
 	}
 	
+	function eraseMenu() {
+		for (xindex=0;xindex<5;xindex++) {
+			for (yindex=4;yindex<6;yindex++) {
+				removeElement("button_" + xindex.toString() + '_' + yindex.toString());
+			}
+		}
+	}
+	
+	function drawMenu(pg) {
+		eraseMenu();
+		switch(pg) {
+			case 0:
+				drawButton('SWAP', 'red', 0, 4, 65, 'input("SWAP")');
+				drawButton('LOG', 'red', 1, 4, 65, 'input("LOG")');
+				drawButton('LN', 'red', 2, 4, 65, 'input("LN")');
+				drawButton('EXP', 'red', 3, 4, 65, 'input("EXP")');
+				drawButton('Pi', 'red', 4, 4, 65, 'input("PI")');
+						
+				drawButton('PREV', 'red', 0, 5, 65, 'act("PREV")');
+				drawButton('SIN', 'red', 1, 5, 65, 'act("SIN")');
+				drawButton('COS', 'red', 2, 5, 65, 'input("COS")');
+				drawButton('TAN', 'red', 3, 5, 65, 'input("TAN")');
+				drawButton('NEXT', 'red', 4, 5, 65, 'input("NEXT")');			
+				break
+			case 1:
+				drawButton('SWAP', 'red', 0, 4, 65, 'input("SWAP")');
+				drawButton('HIST', 'red', 1, 4, 65, 'input("HIST")')
+				drawButton('RUN', 'red', 2, 4, 65, 'input("RUN")');
+				drawButton('EXP', 'red', 3, 4, 65, 'input("EXP")');
+				drawButton('Pi', 'red', 4, 4, 65, 'input("PI")');
+						
+				drawButton('PREV', 'red', 0, 5, 65, 'act("PREV")');
+				drawButton('ASIN', 'red', 1, 5, 65, 'act("ASIN")');
+				drawButton('ACOS', 'red', 2, 5, 65, 'input("ACOS")');
+				drawButton('ATAN', 'red', 3, 5, 65, 'input("ATAN")');
+				drawButton('NEXT', 'red', 4, 5, 65, 'input("NEXT")');			
+				break
+		}
+	}
+	
 	drawKeyboard();
 	drawStack();
 	drawEntry();
+
+//	eraseMenu();
+	drawMenu(0);
 
 	function dostuff() {
 		alert('was clicked!!');
