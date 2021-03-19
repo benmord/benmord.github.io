@@ -109,7 +109,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 
 	function drawStack() {
 		removeClass('stackitem');
-		for (var i=stack.length-1; i>=(stack.length-7); i--) {
+		for (var i=stack.length-1; i>=(stack.length-7 && i > -1); i--) {
 			h = i*ch + 0.6*getHeight() - (stack.length)*ch;
 //			h = 0.6*getHeight() - i*ch
 			var color = 'black';
@@ -392,10 +392,12 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}
 	
 	function drawHistory() {
+//		alert('about to draw history: ' + cmdhistory.toString());
 		removeElement('cmdhistory');
 		x = getWidth() - 0.5*cw;
 		y = ch;
-		drawText(cmdhistory.join(' '), 'bold', 'brown', 'end', 'cmdhistory', x, y, 50, '', false, 'stackitem', false);	
+		drawText(cmdhistory.join(' '), 'bold', 'brown', 'end', 'cmdhistory', x, y, 50, '', false, 'cmdhistory', false);	
+//		alert('drew history: ' + cmdhistory.toString());
 	}
 	
 	drawKeyboard();
