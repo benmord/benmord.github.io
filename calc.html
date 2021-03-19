@@ -128,7 +128,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	
 	function calculate() {
 		switch(entry) {
-			case 'ENTER':
+			case '⏎':
 				break;
 			case '+':
 				stack.push((parseFloat(stack.pop()) + parseFloat(stack.pop())).toString());
@@ -173,7 +173,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 				break;
 			case '(-)':
 				entry = '';
-				runscript('0 ENTER SWAP -');
+				runscript('0 E SWAP -');
 				break;
 			case 'HIST':
 				entry = '';
@@ -234,7 +234,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 			if (entry != '') {
 				stack.push(entry);
 				entry = ''
-			} else if (cmd == 'ENTER' && stack.length>0) {
+			} else if (cmd == '⏎' && stack.length>0) {
 				a = stack.pop();
 				stack.push(a);
 				stack.push(a);
@@ -256,24 +256,24 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}
 	
 	function drawEnter(cw, ch) {
-//		drawText('ENTER', 'bold', 'green', 'start', 'score', 0.5*cw, getHeight() - 95 - ch, 60, 'input("ENTER")', true, 'button', true, 'orange', 10, 10);	
+//		drawText('ENTER', 'bold', 'green', 'start', 'score', 0.5*cw, getHeight() - 95 - ch, 60, 'input("⏎")', true, 'button', true, 'orange', 10, 10);	
 
 		var x = 0.5*cw;
-		var y = getHeight() - 95 - ch;
+		var y = getHeight() - .66*ch;
 
 		var nodeG = document.createElementNS(svgNS, 'g');
-		nodeG.setAttributeNS(null, "onmousedown", 'input("ENTER")');
+		nodeG.setAttributeNS(null, "onmousedown", 'input("⏎")');
 		nodeG.setAttributeNS(null, "class", 'button');
 		var nodeTxt = document.createElementNS(svgNS, 'text');
 		nodeTxt.setAttributeNS(null, "font-weight", 'bold');
 		nodeTxt.setAttributeNS(null, "fill", 'green');
 		nodeTxt.setAttributeNS(null, "font-size", '60');	
-		nodeTxt.setAttributeNS(null, "text-anchor", 'start');
-		nodeTxt.setAttributeNS(null, "writing-mode", "tb");
+		nodeTxt.setAttributeNS(null, "text-anchor", 'middle');
+//		nodeTxt.setAttributeNS(null, "writing-mode", "tb");
 		nodeTxt.setAttributeNS(null, "id", 'EnterButton');
 		nodeTxt.setAttributeNS(null, "class", 'button');
 //		nodeTxt.setAttributeNS(null, "onclick", invoke);		
-		var txt = document.createTextNode('ENTER');
+		var txt = document.createTextNode('⏎');
 		nodeTxt.appendChild(txt);
 		nodeTxt.setAttributeNS(null, "x", x);
 		nodeTxt.setAttributeNS(null, "y", y);			
@@ -283,7 +283,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 			nodeRect.setAttributeNS(null, "width", 180);
 			nodeRect.setAttributeNS(null, "height", 230);
 			nodeRect.setAttributeNS(null, "x", x-90);
-			nodeRect.setAttributeNS(null, "y", y-10);
+			nodeRect.setAttributeNS(null, "y", y-ch - .33*ch + 20);
 			nodeRect.setAttributeNS(null, "style", "fill:#ccccaa;opacity:1");
 			nodeG.appendChild(nodeRect);
 		}
@@ -306,7 +306,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		drawButton('(-)', 'black', 3, 0, 100, 'input("(-)")');
 		drawButton('+', 'blue', 4, 0, 100, 'input("+")');
 
-//		drawText('ENTER', 'bold', 'green', 'start', 0.5*cw, getHeight() - 95 - ch, 60, 'input("ENTER")', true, 'button', true, 'orange', 10, 10);
+//		drawText('ENTER', 'bold', 'green', 'start', 0.5*cw, getHeight() - 95 - ch, 60, 'input("⏎")', true, 'button', true, 'orange', 10, 10);
 		drawEnter(cw, ch);			
 		drawButton('1', 'black', 1, 1, 100, 'input("1")');
 		drawButton('2', 'black', 2, 1, 100, 'input("2")');
