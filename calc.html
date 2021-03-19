@@ -93,7 +93,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		
 	
 	function disp(num) {
-		if (Math.abs(parseFloat(num)) / 10000 > 1 || Math.abs(parseFloat(num)) * 10000 < 1) {
+		if ((Math.abs(parseFloat(num)) / 10000 > 1 || Math.abs(parseFloat(num)) * 10000 < 1) && parseFloat(num) != 0) {
 			return parseFloat(num).toExponential(8);
 		} else if (num.toString().length > 14) {
 			return num.toString().substring(0, 11) + '...';
