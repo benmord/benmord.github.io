@@ -53,7 +53,9 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	function removeElement(id) {
 //		alert('removing element ' + id)
 		var e = document.getElementById(id);
-		e.parentNode.removeChild(e);
+		if (e != null) {
+			e.parentNode.removeChild(e);
+		}
 	}
 	
 	
@@ -234,6 +236,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		if ('0123456789.'.includes(cmd)) {
 			entry += cmd
 			drawEntry();
+			drawHistory();
 		} else {
 			if (entry != '') {
 				stack.push(entry);
@@ -385,9 +388,10 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}
 	
 	function drawHistory() {
+		removeElement('cmdhistory');
 		x = getWidth() - 0.5*cw;
 		y = ch;
-		drawText(cmdhistory.join(' '), 'bold', 'brown', 'end', 'score', x, y, 50, '', false, 'stackitem', false);	
+		drawText(cmdhistory.join(' '), 'bold', 'brown', 'end', 'cmdhistory', x, y, 50, '', false, 'stackitem', false);	
 	}
 	
 	drawKeyboard();
