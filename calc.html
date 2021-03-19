@@ -127,6 +127,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	
 	
 	function calculate() {
+		shouldClearEntry = true;
 		switch(entry) {
 			case '⏎':
 				break;
@@ -190,6 +191,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 				cmdhistory=[];
 				stack=[];
 				runscript(histc.join(' '), true);
+				shouldClearEntry=false;
 				break;
 			case 'SIN':
 				a = parseFloat(stack.pop());
@@ -212,7 +214,9 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 				drawMenu(page);
 				break;
 		}
-		entry='';
+		if (shouldClearEntry) {
+			entry='';
+		}
 		drawEntry();
 		drawStack();
 		drawHistory();
