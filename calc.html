@@ -215,6 +215,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		entry='';
 		drawEntry();
 		drawStack();
+		drawHistory();
 	}
 	
 	var cmdhistory=[];
@@ -379,9 +380,16 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		}
 	}
 	
+	function drawHistory() {
+		x = getWidth() - 0.5*cw;
+		y = ch;
+		drawText(cmdhistory.join(' '), 'bold', 'brown', 'end', 'score', x, y, 50, '', false, 'stackitem', false);	
+	}
+	
 	drawKeyboard();
 	drawStack();
 	drawEntry();
+	drawHistory();
 
 //	eraseMenu();
 	drawMenu(0);
