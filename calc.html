@@ -109,10 +109,14 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 
 	function drawStack() {
 		removeClass('stackitem');
-		for (var i=0; i<stack.length; i++) {
+		for (var i=stack.length-1; i>=(stack.length-7); i--) {
 			h = i*ch + 0.6*getHeight() - (stack.length)*ch;
 //			h = 0.6*getHeight() - i*ch
-			drawText(disp(stack[i]), 'bold', 'black', 'end', 'score', getWidth() - 0.5*cw, h, 90, 'toclip("' + stack[i].toString() + '")', false, 'stackitem', false);
+			var color = 'black';
+			if (stack.length-i>7) {
+				color='gray'
+			}
+			drawText(disp(stack[i]), 'bold', color, 'end', 'score', getWidth() - 0.5*cw, h, 90, 'toclip("' + stack[i].toString() + '")', false, 'stackitem', false);
 		}
 	
 	}
