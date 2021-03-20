@@ -109,7 +109,13 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 
 	function drawStack() {
 		removeClass('stackitem');
-		for (var i=stack.length-1; i>=(stack.length-7 && i > -1); i--) {
+//		alert('starting drawStack for stack ' + stack.toString());
+//		alert('stack.length-1 is ' + (stack.length-1).toString());
+//		alert('stack.length>=(stack.length-7 && stack.length > -1 is ' + (stack.length-7>=(stack.length-7) && stack.length > -1));
+//		alert('stack.length>=(stack.length-7 is ' + (stack.length>=(stack.length-7)));
+//		alert('stack.length > -1 is ' + (stack.length > -1));
+		for (var i=stack.length-1; i>=(stack.length-7) && i > -1; i--) {
+//			alert('about to draw stack entry ' + i.toString() + ' of stack ' + stack.toString());
 			h = i*ch + 0.6*getHeight() - (stack.length)*ch;
 //			h = 0.6*getHeight() - i*ch
 			var color = 'black';
