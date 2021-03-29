@@ -1,24 +1,55 @@
 <HTML>
 <HEAD>
 <META name="viewport" content="width=device-width, user-scalable=no" />
+<STYLE>
+* {margin: 0; padding: 0; border: 0}
+</STYLE>
 </HEAD>
 
 <BODY bgcolor="#F8F8F8">
 
-
-<SVG style="background-color:#CCCCCC;" width="964" height="1804" version="1.1"
-xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
-</SVG>
-
 <!--
-<SVG style="background-color:#CCCCCC;" width="100%" height="100%" version="1.1"
+<SVG style="background-color:#CCCCCC;" width="964" height="1804" version="1.1"
 xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 </SVG>
 -->
 
+
+<SVG style="background-color:#CCCCCC;" width="100%" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
+</SVG>
+
+
 <SCRIPT>
+
+
+//	alert(document.documentElement.clientWidth);
+//	alert(document.documentElement.clientHeight);
+
+//	alert('window.screen.width is ' + window.screen.width.toString());
+//	alert('window.screen.availWidth is ' + window.screen.availWidth.toString());
+//	alert('window.screen.height is ' + window.screen.height.toString());
+//	alert('window.screen.availHeight is ' + window.screen.availHeight.toString());
+
+//	alert('window.innerWidth is ' + window.innerWidth.toString());
+//	alert('window.innerHeight is ' + window.innerHeight.toString());
+
+
+	document.getElementsByTagName('body')
+
 	var svgNS = "http://www.w3.org/2000/svg";
+	cont = document.createElementNS(svgNS, 'svg');
+	cont.setAttributeNS(svgNS, 'style', "background-color:#CCCCCC;");
+	cont.setAttributeNS(svgNS, "width", "1833");
+	cont.setAttributeNS(svgNS, "height", "981");
+	cont.setAttributeNS(svgNS, "version", "1.1");	
+//	cont.setAttributeNS(null, "xmlns", "http://www.w3.org/2000/svg");	
+	cont.setAttributeNS(svgNS, "id", "svgCanvas");	
+//	document.body.appendChild(cont);
 	var cont = document.getElementById("svgCanvas");
+	cont.setAttributeNS(svgNS, "width", "5");
+	
+	
 	
 	function drawText(text, weight, fill, anchor, id, x, y, size, invoke="", rotate=false, cl='', makerect=true, rectcolor='#ccccaa', rectw=180, recth=110) {
 		var nodeG = document.createElementNS(svgNS, 'g');
@@ -65,6 +96,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	
 	
 	function getWidth() {
+		return cont.clientWidth;
 		if (cont.width.animVal.unitType != 2) {
 //			alert('WARNING - unit type is ' + cont.width.animVal.unitType)
 		}
@@ -72,6 +104,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}	
 	
 	function getHeight() {
+		return cont.clientHeight;
 		if (cont.height.animVal.unitType != 2) {
 //			alert('WARNING - unit type is ' + cont.height.animVal.unitType)
 		}
@@ -430,7 +463,10 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 
 //	eraseMenu();
 	drawMenu(0);
+
 //alert('screen width is: ' + screen.width.toString());
+//alert('cont clientWidth is ' + cont.clientWidth.toString())
+//alert('cont clientHeight is ' + cont.clientHeight.toString())
 //alert('getWidth is: ' + getWidth().toString());
 //alert('screen height is: ' + screen.height.toString());
 //alert('getHeight is: ' + getHeight().toString());
