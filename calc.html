@@ -5,8 +5,13 @@
 
 <BODY bgcolor="#F8F8F8">
 
-
+<!--
 <SVG style="background-color:#CCCCCC;" width="964" height="1804" version="1.1"
+xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
+</SVG>
+-->
+
+<SVG style="background-color:#CCCCCC;" width="100%" height="100%" version="1.1"
 xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 </SVG>
 
@@ -217,6 +222,18 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 				a = parseFloat(stack.pop());
 				stack.push(Math.tan(a).toString());
 				break;
+			case 'ASIN':
+				a = parseFloat(stack.pop());
+				stack.push(Math.asin(a).toString());
+				break;
+			case 'ACOS':
+				a = parseFloat(stack.pop());
+				stack.push(Math.acos(a).toString());
+				break;
+			case 'ATAN':
+				a = parseFloat(stack.pop());
+				stack.push(Math.atan(a).toString());
+				break;
 			case 'PREV':
 				page = (2 + page - 1) % 2;
 				drawMenu(page);
@@ -376,7 +393,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 				drawButton('Pi', 'red', 4, 4, 65, 'input("PI")');
 						
 				drawButton('←', 'purple', 0, 5, 65, 'act("PREV")');
-				drawButton('SIN', 'red', 1, 5, 65, 'act("SIN")');
+				drawButton('SIN', 'red', 1, 5, 65, 'input("SIN")');
 				drawButton('COS', 'red', 2, 5, 65, 'input("COS")');
 				drawButton('TAN', 'red', 3, 5, 65, 'input("TAN")');
 				drawButton('→', 'purple', 4, 5, 65, 'act("NEXT")');			
