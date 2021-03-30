@@ -78,7 +78,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 			nodeRect.setAttributeNS(null, "width", rectw);
 			nodeRect.setAttributeNS(null, "height", recth);
 			nodeRect.setAttributeNS(null, "x", x-(rectw/2));
-			nodeRect.setAttributeNS(null, "y", y-recth + 20);
+			nodeRect.setAttributeNS(null, "y", y-0.8*recth);
 			nodeRect.setAttributeNS(null, "style", "fill:"+ rectcolor +";opacity:1");
 			nodeG.appendChild(nodeRect);
 		}
@@ -113,8 +113,8 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	
 //	animate('question');
 
-	var cw = 192;
-	var ch = 120;
+	var cw = getWidth() / 5;
+	var ch = getHeight() / 18;
 
 	stack = [];
 	entry = '';
@@ -323,6 +323,9 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}
 	
 	function drawEnter(cw, ch) {
+		pt = 0.8*Math.min(cw, ch);
+		padding = Math.min(0.1*cw, 0.1*ch);
+
 //		drawText('ENTER', 'bold', 'green', 'start', 'score', 0.5*cw, getHeight() - 95 - ch, 60, 'input("⏎")', true, 'button', true, 'orange', 10, 10);	
 
 		var x = 0.5*cw;
@@ -334,7 +337,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		var nodeTxt = document.createElementNS(svgNS, 'text');
 		nodeTxt.setAttributeNS(null, "font-weight", 'bold');
 		nodeTxt.setAttributeNS(null, "fill", 'green');
-		nodeTxt.setAttributeNS(null, "font-size", '100');	
+		nodeTxt.setAttributeNS(null, "font-size", pt);	
 		nodeTxt.setAttributeNS(null, "text-anchor", 'middle');
 //		nodeTxt.setAttributeNS(null, "writing-mode", "tb");
 		nodeTxt.setAttributeNS(null, "id", 'EnterButton');
@@ -347,10 +350,10 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		cont.appendChild(nodeG);
 		if (true) {
 			var nodeRect = document.createElementNS(svgNS, 'rect');
-			nodeRect.setAttributeNS(null, "width", 180);
-			nodeRect.setAttributeNS(null, "height", 230);
-			nodeRect.setAttributeNS(null, "x", x-90);
-			nodeRect.setAttributeNS(null, "y", y-ch - .33*ch + 20);
+			nodeRect.setAttributeNS(null, "width", cw-padding);
+			nodeRect.setAttributeNS(null, "height", 2*ch-padding);
+			nodeRect.setAttributeNS(null, "x", x-(0.5*cw));
+			nodeRect.setAttributeNS(null, "y", y-(1.3*ch));
 			nodeRect.setAttributeNS(null, "style", "fill:#ccccaa;opacity:1");
 			nodeG.appendChild(nodeRect);
 		}
@@ -358,51 +361,57 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}	
 
 
+//	function drawText(text, weight, fill, anchor, id, x, y, size, invoke="", rotate=false, cl='', makerect=true, rectcolor='#ccccaa', rectw=180, recth=110) {
+
+
 	function drawButton(label, color, xindex, yindex, pt, call) {
 		x = (xindex + 0.5)*cw;
 		y = getHeight() - 10 - yindex*ch;
-		drawText(label, 'bold', color, 'middle', 'button_' + xindex.toString() + '_' + yindex.toString(), x, y, pt, call);
+		padding = Math.min(0.1*cw, 0.1*ch);
+		drawText(label, 'bold', color, 'middle', 'button_' + xindex.toString() + '_' + yindex.toString(), x, y, pt, call, false, '', true, '#ccccaa', cw-padding, ch-padding);
 	}
 
 
 	function drawKeyboard() {
 	
+		pt = 0.8*Math.min(cw, ch);
+	
 //		drawText('ENT', 'bold', 'black', 'center', 30, getHeight() - 10, 70);	
-		drawButton('0', 'black', 1, 0, 100, 'input("0")');
-		drawButton('.', 'black', 2, 0, 100, 'input(".")');
-		drawButton('(-)', 'black', 3, 0, 100, 'input("(-)")');
-		drawButton('+', 'blue', 4, 0, 100, 'input("+")');
+		drawButton('0', 'black', 1, 0, pt, 'input("0")');
+		drawButton('.', 'black', 2, 0, pt, 'input(".")');
+		drawButton('(-)', 'black', 3, 0, pt, 'input("(-)")');
+		drawButton('+', 'blue', 4, 0, pt, 'input("+")');
 
 //		drawText('ENTER', 'bold', 'green', 'start', 0.5*cw, getHeight() - 95 - ch, 60, 'input("⏎")', true, 'button', true, 'orange', 10, 10);
 		drawEnter(cw, ch);			
-		drawButton('1', 'black', 1, 1, 100, 'input("1")');
-		drawButton('2', 'black', 2, 1, 100, 'input("2")');
-		drawButton('3', 'black', 3, 1, 100, 'input("3")');
-		drawButton('-', 'blue', 4, 1, 100, 'input("-")');
+		drawButton('1', 'black', 1, 1, pt, 'input("1")');
+		drawButton('2', 'black', 2, 1, pt, 'input("2")');
+		drawButton('3', 'black', 3, 1, pt, 'input("3")');
+		drawButton('-', 'blue', 4, 1, pt, 'input("-")');
 		
-		drawButton('C', 'blue', 0, 2, 100, 'input("C")');
-		drawButton('4', 'black', 1, 2, 100, 'input("4")');
-		drawButton('5', 'black', 2, 2, 100, 'input("5")');
-		drawButton('6', 'black', 3, 2, 100, 'input("6")');
-		drawButton('x', 'blue', 4, 2, 100, 'input("*")');
+		drawButton('C', 'blue', 0, 2, pt, 'input("C")');
+		drawButton('4', 'black', 1, 2, pt, 'input("4")');
+		drawButton('5', 'black', 2, 2, pt, 'input("5")');
+		drawButton('6', 'black', 3, 2, pt, 'input("6")');
+		drawButton('x', 'blue', 4, 2, pt, 'input("*")');
 				
-		drawButton('↶', 'blue', 0, 3, 100, 'act("UNDO")');
-		drawButton('7', 'black', 1, 3, 100, 'input("7")');
-		drawButton('8', 'black', 2, 3, 100, 'input("8")');
-		drawButton('9', 'black', 3, 3, 100, 'input("9")');
-		drawButton('/', 'blue', 4, 3, 100, 'input("/")');
+		drawButton('↶', 'blue', 0, 3, pt, 'act("UNDO")');
+		drawButton('7', 'black', 1, 3, pt, 'input("7")');
+		drawButton('8', 'black', 2, 3, pt, 'input("8")');
+		drawButton('9', 'black', 3, 3, pt, 'input("9")');
+		drawButton('/', 'blue', 4, 3, pt, 'input("/")');
 				
-		drawButton('SWAP', 'red', 0, 4, 65, 'input("SWAP")');
-		drawButton('LOG', 'red', 1, 4, 65, 'input("LOG")');
-		drawButton('LN', 'red', 2, 4, 65, 'input("LN")');
-		drawButton('EXP', 'red', 3, 4, 65, 'input("EXP")');
-		drawButton('Pi', 'red', 4, 4, 65, 'input("PI")');
+		drawButton('SWAP', 'red', 0, 4, 0.65*pt, 'input("SWAP")');
+		drawButton('LOG', 'red', 1, 4, 0.65*pt, 'input("LOG")');
+		drawButton('LN', 'red', 2, 4, 0.65*pt, 'input("LN")');
+		drawButton('EXP', 'red', 3, 4, 0.65*pt, 'input("EXP")');
+		drawButton('Pi', 'red', 4, 4, 0.65*pt, 'input("PI")');
 				
-		drawButton('HIST', 'red', 0, 5, 65, 'act("HIST")');
-		drawButton('RUN', 'red', 1, 5, 65, 'act("RUN")');
-		drawButton('SIN', 'red', 2, 5, 65, 'input("SIN")');
-		drawButton('COS', 'red', 3, 5, 65, 'input("COS")');
-		drawButton('TAN', 'red', 4, 5, 65, 'input("TAN")');
+		drawButton('HIST', 'red', 0, 5, 0.65*pt, 'act("HIST")');
+		drawButton('RUN', 'red', 1, 5, 0.65*pt, 'act("RUN")');
+		drawButton('SIN', 'red', 2, 5, 0.65*pt, 'input("SIN")');
+		drawButton('COS', 'red', 3, 5, 0.65*pt, 'input("COS")');
+		drawButton('TAN', 'red', 4, 5, 0.65*pt, 'input("TAN")');
 				
 
 	}
@@ -416,33 +425,35 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}
 	
 	function drawMenu(pg) {
+		pt = 0.65*0.8*Math.min(cw, ch);
+	
 		eraseMenu();
 		switch(pg) {
 			case 0:
-				drawButton('SWAP', 'red', 0, 4, 65, 'input("SWAP")');
-				drawButton('LOG', 'red', 1, 4, 65, 'input("LOG")');
-				drawButton('LN', 'red', 2, 4, 65, 'input("LN")');
-				drawButton('EXP', 'red', 3, 4, 65, 'input("EXP")');
-				drawButton('Pi', 'red', 4, 4, 65, 'input("PI")');
+				drawButton('SWAP', 'red', 0, 4, pt, 'input("SWAP")');
+				drawButton('LOG', 'red', 1, 4, pt, 'input("LOG")');
+				drawButton('LN', 'red', 2, 4, pt, 'input("LN")');
+				drawButton('EXP', 'red', 3, 4, pt, 'input("EXP")');
+				drawButton('Pi', 'red', 4, 4, pt, 'input("PI")');
 						
-				drawButton('←', 'purple', 0, 5, 65, 'act("PREV")');
-				drawButton('SIN', 'red', 1, 5, 65, 'input("SIN")');
-				drawButton('COS', 'red', 2, 5, 65, 'input("COS")');
-				drawButton('TAN', 'red', 3, 5, 65, 'input("TAN")');
-				drawButton('→', 'purple', 4, 5, 65, 'act("NEXT")');			
+				drawButton('←', 'purple', 0, 5, pt, 'act("PREV")');
+				drawButton('SIN', 'red', 1, 5, pt, 'input("SIN")');
+				drawButton('COS', 'red', 2, 5, pt, 'input("COS")');
+				drawButton('TAN', 'red', 3, 5, pt, 'input("TAN")');
+				drawButton('→', 'purple', 4, 5, pt, 'act("NEXT")');			
 				break
 			case 1:
-				drawButton('SWAP', 'red', 0, 4, 65, 'input("SWAP")');
-				drawButton('HIST', 'red', 1, 4, 65, 'act("HIST")')
-				drawButton('RUN', 'red', 2, 4, 65, 'act("RUN")');
-				drawButton('EXP', 'red', 3, 4, 65, 'input("EXP")');
-				drawButton('Pi', 'red', 4, 4, 65, 'input("PI")');
+				drawButton('SWAP', 'red', 0, 4, pt, 'input("SWAP")');
+				drawButton('HIST', 'red', 1, 4, pt, 'act("HIST")')
+				drawButton('RUN', 'red', 2, 4, pt, 'act("RUN")');
+				drawButton('EXP', 'red', 3, 4, pt, 'input("EXP")');
+				drawButton('Pi', 'red', 4, 4, pt, 'input("PI")');
 						
-				drawButton('←', 'purple', 0, 5, 65, 'act("PREV")');
-				drawButton('ASIN', 'red', 1, 5, 65, 'act("ASIN")');
-				drawButton('ACOS', 'red', 2, 5, 65, 'input("ACOS")');
-				drawButton('ATAN', 'red', 3, 5, 65, 'input("ATAN")');
-				drawButton('→', 'purple', 4, 5, 65, 'act("NEXT")');			
+				drawButton('←', 'purple', 0, 5, pt, 'act("PREV")');
+				drawButton('ASIN', 'red', 1, 5, pt, 'act("ASIN")');
+				drawButton('ACOS', 'red', 2, 5, pt, 'input("ACOS")');
+				drawButton('ATAN', 'red', 3, 5, pt, 'input("ATAN")');
+				drawButton('→', 'purple', 4, 5, pt, 'act("NEXT")');			
 				break
 		}
 	}
