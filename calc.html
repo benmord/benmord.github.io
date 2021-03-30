@@ -146,6 +146,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}
 
 	function drawStack() {
+		pt = 0.8*Math.min(cw, ch);
 		removeClass('stackitem');
 //		alert('starting drawStack for stack ' + stack.toString());
 //		alert('stack.length-1 is ' + (stack.length-1).toString());
@@ -160,17 +161,18 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 			if (stack.length-i>7) {
 				color='gray'
 			}
-			drawText(disp(stack[i]), 'bold', color, 'end', 'score', getWidth() - 0.5*cw, h, 90, 'toclip("' + stack[i].toString() + '")', false, 'stackitem', false);
+			drawText(disp(stack[i]), 'bold', color, 'end', 'score', getWidth() - 0.5*cw, h, pt, 'toclip("' + stack[i].toString() + '")', false, 'stackitem', false);
 		}
 	
 	}
 	
 	function drawEntry() {
+		pt = 0.8*Math.min(cw, ch);
 		var oldItems = document.getElementsByClassName('entry');
 		for (var i=0; i<oldItems.length; i++) {
 			oldItems[i].remove();
 		}	
-		drawText(entry, 'bold', 'black', 'start', 'score', 0.1*cw, 0.6*getHeight(), 90, '', false, 'entry', false);
+		drawText(entry, 'bold', 'black', 'start', 'score', 0.1*cw, 0.6*getHeight(), pt, '', false, 'entry', false);
 	}
 	
 	var page=0;	
@@ -459,11 +461,12 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	}
 	
 	function drawHistory() {
+		pt = 0.4*Math.min(cw, ch);	
 //		alert('about to draw history: ' + cmdhistory.toString());
 		removeElement('cmdhistory');
 		x = getWidth() - 0.5*cw;
 		y = ch;
-		drawText(cmdhistory.join(' '), 'bold', 'brown', 'end', 'cmdhistory', x, y, 50, '', false, 'cmdhistory', false);	
+		drawText(cmdhistory.join(' '), 'bold', 'brown', 'end', 'cmdhistory', x, y, pt, '', false, 'cmdhistory', false);	
 //		alert('drew history: ' + cmdhistory.toString());
 	}
 	
