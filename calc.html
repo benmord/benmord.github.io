@@ -178,6 +178,149 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	var page=0;	
 	
 	
+	var dUnits = new Map(); //unit symbol = [base units, multiplier, offset, page number, column, row]
+	aUnits = [];
+	
+	function addUnit(u, bases, multiplier, offset) {
+		dUnits[u] = [u, bases, multiplier, offset, Math.floor(dUnits.size / 20), dUnits.size % 5, Math.floor(dUnits.size / 5) % 20];
+		aUnits.push(u);
+	}
+
+
+	addUnit('℃', 	'K:1', 	1, 273.15		);
+	addUnit('Δ℃', 'K:1', 	1, 0			);
+	addUnit('℉', 	'K:1', 	5/9, 273.15 - 32*(5/9)	);
+	addUnit('Δ℉', 'K:1', 		5/9, 0			);
+	addUnit('K', 	'K:1', 	1, 0			);
+	addUnit('㎜', 	'm:1', 	0.001, 0		);
+	addUnit('㎝', 	'm:1', 	0.01, 0		);
+	addUnit('m', 	'm:1', 	1, 0			);
+	addUnit('㎞', 	'm:1', 	1000, 0		);
+	addUnit('㎢', 	'm:2', 	1000*1000, 0		);
+	addUnit('\"', 	'm:1', 	0.9144/(3*12), 0	);
+	addUnit('\'', 	'm:1', 	0.9144/3, 0		);
+	addUnit('yd', 	'm:1', 	0.9144, 0		);
+	addUnit('mi', 	'm:1', 	1609.344, 0		);
+	addUnit('acre', 'm:2', 	4046.8564224, 0		);
+	addUnit('V', 	'V:1', 	1, 0			); //volt
+	addUnit('A', 	'A:1', 	1, 0			); //amp
+	addUnit('Ω', 	'V:1 A:-1', 	1, 0			); //ohm
+	addUnit('C', 	'A:1 S:1', 	1, 0			); //Coulomb
+	addUnit('㎌', 	'A:1 S:1 V:-1', 	0.000001, 0	); //microfarad
+
+	addUnit('oz', 	'g:1', 	28.349523125, 0	);
+	addUnit('ozt', 'g:1', 		31.1034768, 0		);
+	addUnit('℔', 	'g:1', 	453.59237, 0		);
+	addUnit('ton', 'g:1', 		907184., 0		);
+	addUnit('°', 	'㎭:1', 	0.01745329, 0		);
+	addUnit('mg', 	'g:1', 	0.001, 0		);
+	addUnit('g', 	'g:1', 	1, 0			);
+	addUnit('kg', 	'g:1', 	1000, 0		);
+	addUnit('tonne','g:1', 	1000000, 0		);
+	addUnit('㎭', 	'㎭:1', 	1, 0			);
+	addUnit('s', 	's:1', 	1, 0			);
+	addUnit('m', 	's:1', 	60, 0			);
+	addUnit('h', 	's:1', 	3600, 0		);
+	addUnit('d', 	's:1', 	3600*24, 0		);
+	addUnit('sr', 	'sr:1', 	1, 0			);
+	addUnit('w', 	's:1', 	3600*24*7, 0		);
+	addUnit('month', 's:1', 	3600*24*365.25/12, 0	);
+	addUnit('yr', 	's:1', 	3600*24*365.25, 0	);
+	addUnit('centuries', 	's:1', 	3600*24*365.25*100, 0	);
+	addUnit('millenia', 	's:1', 	3600*24*365.25*1000, 0	);
+//	addUnit('lm', 	'lm:1', 	1, 0			); //lumen
+	addUnit('lm', 	'w:1', 	1/683, 0		); //lumen //at frequency of maximum visual sensitivity, i.e. 5.4e14 Hz
+	addUnit('cd', 	'w:1 sr:-1', 	1/683, 0		); //candela
+	addUnit('lx', 	'w:1 m:-2', 	1/683, 0		); //lux
+	addUnit('v', 	'v:1', 	1, 0		); //volt
+	
+	baseUnits=['m', 's', 'K', 'V', 'A', 'g', '㎭', 'sr'];
+
+
+	function parseUnitPowers(uPSs) {
+		retVal = new Map();
+		uPSa = uPSs.split(' ');
+		for (uPS in uPSa) {
+			retVal[uPS.split(':')[0]] = parseInt(uPS.split(':')[1]);
+		}
+		return retVal;
+	}
+
+	function initUnits() {
+	//initUnit initializes a number to be ready for units
+		n = stack.pop();
+		if (!('units' in n)) {
+			n.units = new Object();
+			n.units.base=new Map();
+			for (bu in baseUnits) {
+				n.units.base[bu] = 0;
+			} 
+			n.units.disp=[]; //prefered units for display, in descending order
+		}
+		stack.push(n);
+	}
+
+	alert('going to try to add a property to a number');
+	testn=3;
+	testval='george';
+	alert(testval);
+	
+	function hasUnit() {
+		n=stack.pop();
+		retVal = false;
+		if ('units' in n) {
+			for (bu in n.units.base) {
+				if (bu != 0) {
+					retVal = true;
+				}
+			}
+		}
+		stack.push(n);
+		return retVal;
+	}
+	
+	function incUnit(unitName, power) { //increases a base unit's power
+		initUnit(unitName);
+		var n = stack.pop();
+		n.units.base[unitName].power+=power;
+		stack.push(n);
+	}
+	
+	function decUnit(unitName, power) { //decreases a base unit's power
+		initUnit(unitName);
+		var n = stack.pop();
+		n.units.base[unitName].power-=power;
+		stack.push(n);
+	}
+
+	function multUnit(unitName, power) { //multiplies a base unit's power
+		initUnit(unitName);
+		var n = stack.pop();
+		n.units.base[unitName].power*=power;
+		stack.push(n);
+	}
+	
+	function applyUnit(unitName) {
+		alert('going to apply unit ' + unitName);
+		if (!hasUnit()) {
+			initUnits();
+			BUs = parsePowerUnits(dUnits(unitName)[0]);
+			for (bu in BUs) {
+				incUnit(bu, BUs[bu]);
+			}
+			multiplier = dUnits(unitName)[1];
+			offset = dUnits(unitName)[2];
+			n = stack.pop();
+			units = n.units;
+			n = n*multiplier + offset;
+			n.units = units;
+			stack.push(n);
+		}
+		
+	}
+	
+	var keyboardPage=0;
+	
 	function calculate() {
 		shouldClearEntry = true;
 		switch(entry) {
@@ -270,13 +413,32 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 				stack.push(Math.atan(a).toString());
 				break;
 			case 'PREV':
-				page = (2 + page - 1) % 2;
+				page = (3 + page - 1) % 3;
 				drawMenu(page);
 				break;
 			case 'NEXT':
-				page = (page + 1) % 2;
+				page = (page + 1) % 3;
 				drawMenu(page);
 				break;
+			case 'PREVKEYBOARD':
+				keyboardPage = (3 + keyboardPage - 1) % 3;
+				if (keyboardPage == 0) {
+					drawKeyboard();
+				} else {
+					drawUnitKeys(keyboardPage-1);
+				}
+				break;
+			case 'NEXTKEYBOARD':
+				keyboardPage = (keyboardPage + 1) % 3;
+				if (keyboardPage == 0) {
+					drawKeyboard();
+				} else {
+					drawUnitKeys(keyboardPage-1);
+				}
+				break;
+		}
+		if (aUnits.includes(entry)) {
+			applyUnit(entry);
 		}
 		if (shouldClearEntry) {
 			entry='';
@@ -322,6 +484,10 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 				act(cmds[i]);
 			}
 		}
+	}
+	
+	function eraseEnter() {
+		removeElement('EnterButton');
 	}
 	
 	function drawEnter(cw, ch) {
@@ -373,6 +539,26 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		drawText(label, 'bold', color, 'middle', 'button_' + xindex.toString() + '_' + yindex.toString(), x, y, pt, call, false, '', true, '#ccccaa', cw-padding, ch-padding);
 	}
 
+	function eraseKeyboard() {
+		for (xindex=0;xindex<5;xindex++) {
+			for (yindex=0;yindex<4;yindex++) {
+				removeElement("button_" + xindex.toString() + '_' + yindex.toString());
+			}
+		}
+		eraseEnter();
+	}
+	
+	function drawUnitKeys(page) {
+		pt = 0.65*0.8*Math.min(cw, ch);
+		eraseKeyboard();
+		for (i=20*page;i<20 + 20*page;i++) {
+			var u = ' ';
+			if (i < aUnits.length) {
+				u = aUnits[i];
+			}
+			drawButton(u, 'black', i%5, Math.floor(i%20/5), pt, 'input("\\' + u + '")');
+		}
+	}
 
 	function drawKeyboard() {
 	
@@ -391,13 +577,13 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		drawButton('3', 'black', 3, 1, pt, 'input("3")');
 		drawButton('-', 'blue', 4, 1, pt, 'input("-")');
 		
-		drawButton('C', 'blue', 0, 2, pt, 'input("C")');
+		drawButton('SWAP', 'blue', 0, 2, 0.65*pt, 'input("SWAP")');
 		drawButton('4', 'black', 1, 2, pt, 'input("4")');
 		drawButton('5', 'black', 2, 2, pt, 'input("5")');
 		drawButton('6', 'black', 3, 2, pt, 'input("6")');
 		drawButton('x', 'blue', 4, 2, pt, 'input("*")');
 				
-		drawButton('↶', 'blue', 0, 3, pt, 'act("UNDO")');
+		drawButton('C', 'blue', 0, 3, pt, 'input("C")');
 		drawButton('7', 'black', 1, 3, pt, 'input("7")');
 		drawButton('8', 'black', 2, 3, pt, 'input("8")');
 		drawButton('9', 'black', 3, 3, pt, 'input("9")');
@@ -420,7 +606,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	
 	function eraseMenu() {
 		for (xindex=0;xindex<5;xindex++) {
-			for (yindex=4;yindex<6;yindex++) {
+			for (yindex=4;yindex<7;yindex++) {
 				removeElement("button_" + xindex.toString() + '_' + yindex.toString());
 			}
 		}
@@ -433,29 +619,63 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		switch(pg) {
 			case 0:
 				drawButton('SWAP', 'red', 0, 4, pt, 'input("SWAP")');
-				drawButton('LOG', 'red', 1, 4, pt, 'input("LOG")');
-				drawButton('LN', 'red', 2, 4, pt, 'input("LN")');
-				drawButton('EXP', 'red', 3, 4, pt, 'input("EXP")');
-				drawButton('Pi', 'red', 4, 4, pt, 'input("PI")');
+				drawButton('LOG',  'red', 1, 4, pt, 'input("LOG")');
+				drawButton('LN',   'red', 2, 4, pt, 'input("LN")');
+				drawButton('EXP',  'red', 3, 4, pt, 'input("EXP")');
+				drawButton('Pi',   'red', 4, 4, pt, 'input("PI")');
 						
-				drawButton('←', 'purple', 0, 5, pt, 'act("PREV")');
-				drawButton('SIN', 'red', 1, 5, pt, 'input("SIN")');
-				drawButton('COS', 'red', 2, 5, pt, 'input("COS")');
-				drawButton('TAN', 'red', 3, 5, pt, 'input("TAN")');
-				drawButton('→', 'purple', 4, 5, pt, 'act("NEXT")');			
+				drawButton('HIST', 'red',    0, 5, pt, 'act("HIST")');
+				drawButton('ASIN', 'red',    1, 5, pt, 'act("ASIN")');
+				drawButton('ACOS', 'red',    2, 5, pt, 'input("ACOS")');
+				drawButton('ATAN', 'red',    3, 5, pt, 'input("ATAN")');
+				drawButton('RUN',  'red',    4, 5, pt, 'act("RUN")');			
+
+				drawButton('←',   'purple', 0, 6, pt, 'act("PREV")');
+//				drawButton('SIN',  'red',    1, 6, pt, 'input("SIN")');
+				drawButton('⇦',  'purple',    1, 6, pt, 'act("PREVKEYBOARD")');
+//				drawButton('COS',  'red',    2, 6, pt, 'input("COS")');
+				drawButton('↶', 'purple', 2, 6, pt, 'act("UNDO")');
+//				drawButton('TAN',  'red',    3, 6, pt, 'input("TAN")');
+				drawButton('⇨',  'purple',    3, 6, pt, 'act("NEXTKEYBOARD")');
+				drawButton('→',   'purple', 4, 6, pt, 'act("NEXT")');			
 				break
 			case 1:
 				drawButton('SWAP', 'red', 0, 4, pt, 'input("SWAP")');
-				drawButton('HIST', 'red', 1, 4, pt, 'act("HIST")')
-				drawButton('RUN', 'red', 2, 4, pt, 'act("RUN")');
-				drawButton('EXP', 'red', 3, 4, pt, 'input("EXP")');
-				drawButton('Pi', 'red', 4, 4, pt, 'input("PI")');
+				drawButton('℃', 'red', 1, 4, pt, 'act("℃")')
+				drawButton('℉',  'red', 2, 4, pt, 'act("℉")');
+				drawButton('K',  'red', 3, 4, pt, 'input("K")');
+				drawButton('mi',   'red', 4, 4, pt, 'input("mi")');
 						
-				drawButton('←', 'purple', 0, 5, pt, 'act("PREV")');
-				drawButton('ASIN', 'red', 1, 5, pt, 'act("ASIN")');
-				drawButton('ACOS', 'red', 2, 5, pt, 'input("ACOS")');
-				drawButton('ATAN', 'red', 3, 5, pt, 'input("ATAN")');
-				drawButton('→', 'purple', 4, 5, pt, 'act("NEXT")');			
+				drawButton('㎜', 'red', 0, 5, pt, 'input("㎜")');
+				drawButton('㎝', 'red', 1, 5, pt, 'act("㎝")')
+				drawButton('m',  'red', 2, 5, pt, 'act("m")');
+				drawButton('㎞',  'red', 3, 5, pt, 'input("㎞")');
+				drawButton('㎢',   'red', 4, 5, pt, 'input("㎢")');
+						
+				drawButton('←',   'purple', 0, 6, pt, 'act("PREV")');
+				drawButton('℔', 'red',    1, 6, pt, 'act("℔")');
+				drawButton('g', 'red',    2, 6, pt, 'input("g")');
+				drawButton('㎏', 'red',    3, 6, pt, 'input("㎏")');
+				drawButton('→',   'purple', 4, 6, pt, 'act("NEXT")');			
+				break
+			case 2:
+				drawButton('SWAP', 'red', 0, 4, pt, 'input("SWAP")');
+				drawButton('J', 'red', 1, 4, pt, 'act("J")')
+				drawButton('kwh',  'red', 2, 4, pt, 'act("kwh")');
+				drawButton('wh',  'red', 3, 4, pt, 'input("wh")');
+				drawButton('btu',   'red', 4, 4, pt, 'input("btu")');
+						
+				drawButton('\"', 'red', 0, 5, pt, 'input("\\\"")');
+				drawButton('\'', 'red', 1, 5, pt, 'act("\\\'")')
+				drawButton('yd',  'red', 2, 5, pt, 'act("yd")');
+				drawButton('mi',  'red', 3, 5, pt, 'input("mi")');
+				drawButton('ac',   'red', 4, 5, pt, 'input("ac")');
+						
+				drawButton('←',   'purple', 0, 6, pt, 'act("PREV")');
+				drawButton('°', 'red',    1, 6, pt, 'act("°")');
+				drawButton('㎭', 'red',    2, 6, pt, 'input("㎭")');
+				drawButton('㎏', 'red',    3, 6, pt, 'input("ATAN")');
+				drawButton('→',   'purple', 4, 6, pt, 'act("NEXT")');			
 				break
 		}
 	}
