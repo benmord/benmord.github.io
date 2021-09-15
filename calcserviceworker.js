@@ -12,7 +12,7 @@ self.addEventListener('install', function(event) {
     'icons/arsia_icon_384x384.png',
     'icons/arsia_icon_512x512.png'
    ]);
-  });
+  }),
  );
 });
  
