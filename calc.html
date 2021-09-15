@@ -117,6 +117,16 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 	var ch = getHeight() / 18;
 
 	stack = [];
+	var cmdhistory=[];
+	
+	oldStackJSON = window.localStorage.getItem('stack');
+	oldCmdhistory = window.localStorage.getItem('cmdhistory');
+	if (oldStackJSON) {
+		stack = JSON.parse(oldStackJSON);
+	}
+	if (oldCmdhistory) {
+		cmdhistory = JSON.parse(oldCmdhistory);
+	}
 	entry = '';
 	
 	
@@ -342,8 +352,10 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 				a = parseFloat(stack.pop());
 				stack.push((a / b).toString());
 				break;
-			case 'C':
-				stack.pop();
+			case 'CLEAR':
+//				stack.pop();
+				stack = [];
+				cmdhistory = [];
 				break;
 			case 'SWAP':
 				b = parseFloat(stack.pop());
@@ -448,11 +460,16 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		drawHistory();
 	}
 	
-	var cmdhistory=[];
 	
 	function input(cmd) {
 		cmdhistory.push(cmd);
 		act(cmd);
+		persist();
+	}
+	
+	function persist() {
+		window.localStorage.setItem('stack', JSON.stringify(stack));
+		window.localStorage.setItem('cmdhistory', JSON.stringify(cmdhistory));
 	}
 	
 	function act(cmd) {
@@ -583,7 +600,7 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		drawButton('6', 'black', 3, 2, pt, 'input("6")');
 		drawButton('x', 'blue', 4, 2, pt, 'input("*")');
 				
-		drawButton('C', 'blue', 0, 3, pt, 'input("C")');
+		drawButton('C', 'blue', 0, 3, pt, 'input("CLEAR")');
 		drawButton('7', 'black', 1, 3, pt, 'input("7")');
 		drawButton('8', 'black', 2, 3, pt, 'input("8")');
 		drawButton('9', 'black', 3, 3, pt, 'input("9")');
