@@ -22,6 +22,8 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 
 <SCRIPT>
 
+alert('starting JavaScript');
+
 	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker.register('calcserviceworker.js')
 		.then(function(registration) {
@@ -286,6 +288,10 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 //	testn=3;
 //	testval='george';
 //	alert(testval);
+
+
+	alert('Made it to line 293');
+
 	
 	function hasUnit() {
 		n=stack.pop();
@@ -740,6 +746,9 @@ xmlns="http://www.w3.org/2000/svg" id="svgCanvas" >
 		alert(getHeight());
 		//964 x 1804.3636... Chrome on a Pixel 4a
 	}
+
+
+alert('finishing JavaScript');
 
 
 </SCRIPT>
