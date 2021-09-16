@@ -1,6 +1,6 @@
 self.addEventListener('install', function(event) {
  event.waitUntil(
-  caches.open('calc-static-v1').then(function (cache) {
+  caches.open('calc-static-v2').then(function (cache) {
    return cache.addAll([
     'https://benmord.github.io/calc.html',
     'https://benmord.github.io/icons/arsia_icon_72x72.png',
