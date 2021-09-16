@@ -28,3 +28,5 @@ self.addEventListener('fetch', (e) => {
     return response;
   })());
 });
+
+//made a change
